@@ -9,6 +9,7 @@ Route::redirect('/', 'dashboard');
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('vaccine-center', [VaccineCenterController::class, 'vaccineCenter'])->name('vaccine.center');
 Route::get('vaccine-register', [VaccineRegisterController::class, 'vaccineRegister'])->name('vaccine.register');
+Route::post('vaccine-register-store', [VaccineRegisterController::class, 'vaccineRegisterStore'])->name('vaccine.register.store');
 
 Route::post('test', function (\Illuminate\Http\Request $request) {
     dd($request->all());

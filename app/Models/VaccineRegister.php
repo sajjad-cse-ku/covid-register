@@ -8,7 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class VaccineRegister extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'center_id', 'scheduled_date', 'vaccinated'];
+    protected $fillable = [
+        'center_id',
+        'name',
+        'email',
+        'nid',
+        'scheduled_date',
+        'registration_status',
+    ];
+//    protected $table = 'vaccine_registers';
 
     public function user()
     {

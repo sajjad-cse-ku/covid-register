@@ -10,10 +10,11 @@ import {
 import { usePage } from '@inertiajs/react';
 const Register = () => {
   const { centers } = usePage().props;
-  const [form, submit, updateValue] = useForm('post', route('test'), {
-    _method: 'post',
+  const [form, submit, updateValue] = useForm('post', route('vaccine.register.store'), {
     name: '',
     center_id:'',
+    nid:'',
+    email:'',
   });
   return (
     <>
@@ -21,8 +22,8 @@ const Register = () => {
         <form onSubmit={e => submit(e, { forceFormData: true })}>
           <Group grow>
             <Select
-              label='Country'
-              placeholder='Select country'
+              label='Center Name'
+              placeholder='<=== Select country ===>'
               mt='md'
               searchable={true}
               value={form.data.center_id?.toString()}
@@ -33,19 +34,34 @@ const Register = () => {
               }))}
               error={form.errors.center_id}
             />
-
-
             <TextInput
-              label='Name'
-              placeholder='Company name'
-              required
+              label='Full Name'
+              placeholder='Enter your full name'
               mt='md'
-              value="sajjad"
-              onChange={e => updateValue('name', e.target.value)}
-              error={form.errors.name}
+              value={form.data?.name}
+              onChange={e => updateValue('name', e.target?.value)}
+              error={form.errors?.name}
             />
           </Group>
 
+          <Group grow>
+            <TextInput
+              label='NID'
+              placeholder='Enter your nid number'
+              mt='md'
+              value={form.data.nid}
+              onChange={e => updateValue('nid', e.target?.value)}
+              error={form.errors.nid}
+            />
+            <TextInput
+              label='Email'
+              placeholder='Enter your email'
+              mt='md'
+              value={form.data.email}
+              onChange={e => updateValue('email', e.target?.value)}
+              error={form.errors.email}
+            />
+          </Group>
           <Group
             justify='flex-end'
             mt='xl'

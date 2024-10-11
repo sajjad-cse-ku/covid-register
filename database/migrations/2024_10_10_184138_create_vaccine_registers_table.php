@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('vaccine_registers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('center_id')->constrained('vaccine_centers')->onDelete('cascade');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('nid', 20)->unique();
             $table->date('scheduled_date')->nullable();
-            $table->boolean('vaccinated')->default(false);
+            $table->enum('registration_status', ['SCHEDULED', 'VACCINATED'])->default('SCHEDULED');
+            $table->index(['name', 'email', 'nid']);
             $table->timestamps();
         });
     }

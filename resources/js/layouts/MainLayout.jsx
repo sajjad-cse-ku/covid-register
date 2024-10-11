@@ -1,12 +1,13 @@
 import FlashNotification from "@/components/FlashNotification";
 import NavBarNested from "@/layouts/NavBarNested";
 import Notifications from "@/layouts/Notifications";
-import { Head } from "@inertiajs/react";
+import { Head,usePage } from "@inertiajs/react";
 import { AppShell } from "@mantine/core";
 
 
-export default function MainLayout({ children, title }) {
 
+export default function MainLayout({ children, title }) {
+  const { flash } = usePage().props;
   return (
     <AppShell
       navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: false } }}
@@ -14,7 +15,7 @@ export default function MainLayout({ children, title }) {
     >
       <Head title={title} />
 
-      <FlashNotification />
+      <FlashNotification flash={flash} />
 
       <AppShell.Navbar>
         <NavBarNested></NavBarNested>
