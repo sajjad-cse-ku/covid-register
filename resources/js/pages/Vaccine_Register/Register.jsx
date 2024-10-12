@@ -23,7 +23,7 @@ const Register = () => {
           <Group grow>
             <Select
               label='Center Name'
-              placeholder='<=== Select country ===>'
+              placeholder='<=== Select center ===>'
               mt='md'
               searchable={true}
               value={form.data.center_id?.toString()}

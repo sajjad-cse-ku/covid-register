@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VaccineRegisterRequest;
+use App\Jobs\VaccineNotificationJobMail;
 use App\Models\VaccineCenter;
 use App\Models\VaccineRegister;
 use App\Services\VaccineRegistrationService;
@@ -38,18 +39,18 @@ class VaccineRegisterController extends Controller
             $requestData['scheduled_date'] = $this->regService->getNextAvailableDateForCenter((int) $requestData['center_id']);
             $registration = VaccineRegister::create($requestData);
 
-            // We're creating a Carbon instance with the vaccination date, subtracting one day, setting the time to 9 PM,
-            // and converting it to the Bangladesh time zone. We're then queuing a new instance of the VaccineNotification
-            // mail class to be sent to the user at the specified notification time.
+            // We're creating a Carbon instance for the vaccination date, adjusting it to one day earlier, setting the time to 9 PM,
+            // and converting it to the Bangladesh time zone. After that,
+            // we schedule a VaccineNotification mail to be sent to the user at the specified notification time.
 
             $emailData = $this->regService->data((object) $registration);
             $notification_time = Carbon::parse($emailData['scheduled_date'])->subDay()->setTimezone('Asia/Dhaka')->setTime(21, 0, 0);
-            //            Mail::to($emailData['email'])->later($notification_time, new VaccineNotification($emailData));
+            VaccineNotificationJobMail::dispatch($emailData)->delay($notification_time);
             DB::commit();
             return to_route('dashboard')->with('success', 'A new user was successfully created.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return withError($e->getMessage(), 400);
+            return $e->getMessage();
         }
     }
 }
