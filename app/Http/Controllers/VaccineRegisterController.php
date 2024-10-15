@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VaccineRegisterRequest;
+use App\Http\Requests\VaccineRegisterStatusRequest;
 use App\Jobs\VaccineNotificationJobMail;
 use App\Models\VaccineCenter;
 use App\Models\VaccineRegister;
@@ -47,10 +48,27 @@ class VaccineRegisterController extends Controller
             $notification_time = Carbon::parse($emailData['scheduled_date'])->subDay()->setTimezone('Asia/Dhaka')->setTime(21, 0, 0);
             VaccineNotificationJobMail::dispatch($emailData)->delay($notification_time);
             DB::commit();
+
             return to_route('dashboard')->with('success', 'A new user was successfully created.');
         } catch (\Exception $e) {
             DB::rollBack();
+
             return $e->getMessage();
         }
+    }
+
+    public function vaccineRegisterStatus()
+    {
+        return Inertia::render('Vaccine_Register/RegisterStatus');
+    }
+
+    public function getVaccineRegisterStatus(VaccineRegisterStatusRequest $request)
+    {
+
+        $registration = VaccineRegister::where($request->validated())
+            ->with('vaccinecenter:id,center_name')
+            ->first(['id', 'scheduled_date', 'center_id', 'registration_status']);
+
+        return response()->json($registration);
     }
 }

@@ -36,6 +36,13 @@ export default function Sidebar() {
         active: route().current("vaccine-register"),
         visible: true,
       },
+      {
+        label: "Show Status",
+        icon: IconGauge,
+        link: route("vaccine.register.status"),
+        active: route().current("vaccine-register-status"),
+        visible: true,
+      },
     ]);
   }, []);
 
